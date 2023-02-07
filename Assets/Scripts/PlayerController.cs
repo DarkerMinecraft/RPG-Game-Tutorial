@@ -15,15 +15,16 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Vector2 mousePos = Input.mousePosition;
-        RaycastHit hit;
-
-
-        Ray ray = camera.ScreenPointToRay(mousePos);
-        bool hasHit = Physics.Raycast(ray, out hit);
-        if (hasHit)
+        if (Input.GetMouseButton(0))
         {
-            mover.MoveTo(hit.point);
+            Vector2 mousePos = Input.mousePosition;
+            RaycastHit hit;
+
+
+            Ray ray = camera.ScreenPointToRay(mousePos);
+            bool hasHit = Physics.Raycast(ray, out hit);
+            if (hasHit)
+                mover.MoveTo(hit.point);
         }
     }
 
