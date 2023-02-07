@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerMove : MonoBehaviour
+public class Mover : MonoBehaviour
 {
 
     private NavMeshAgent agent;
@@ -15,20 +13,15 @@ public class PlayerMove : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         cam = Camera.main;
-        animator = GetComponent<Animator>();    
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        if (Input.GetMouseButton(0)) 
-        {
-            MoveToCursor();
-        }
-
         UpdateAnimator();
     }
 
-    private void MoveToCursor() 
+    private void MoveToCursor()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
@@ -37,11 +30,16 @@ public class PlayerMove : MonoBehaviour
 
         if (hasHit)
         {
-            agent.destination = hit.point;
+            MoveTo(hit.point);
         }
     }
 
-    private void UpdateAnimator() 
+    public void MoveTo(Vector3 destination)
+    {
+        agent.destination = destination;
+    }
+
+    private void UpdateAnimator()
     {
         Vector3 velocity = agent.velocity;
         Vector3 localVelocity = transform.InverseTransformDirection(velocity);
