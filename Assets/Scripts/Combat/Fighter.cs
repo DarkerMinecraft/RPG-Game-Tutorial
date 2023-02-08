@@ -64,7 +64,7 @@ namespace RPG.Combat
             animator.SetTrigger("attack");
         }
 
-        public bool CanAttack(CombatTarget combatTarget) 
+        public bool CanAttack(GameObject combatTarget) 
         {
             if (combatTarget == null) return false;
 
@@ -72,7 +72,7 @@ namespace RPG.Combat
             return !healthToTest.IsDead();
         }
 
-        public void Attack(CombatTarget combatTarget)
+        public void Attack(GameObject combatTarget)
         {
             target = combatTarget.GetComponent<Health>();
             actionScheduler.StartAction(this);
