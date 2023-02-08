@@ -1,3 +1,5 @@
+using RPG.Combat;
+using RPG.Core;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,15 +9,19 @@ namespace RPG.Movement
     {
 
         private NavMeshAgent agent;
-        private Camera cam;
-
+       
         private Animator animator;
+
+        private Fighter fighter;
+
+        private ActionScheduler actionScheduler;
 
         void Start()
         {
             agent = GetComponent<NavMeshAgent>();
-            cam = Camera.main;
             animator = GetComponent<Animator>();
+            fighter = GetComponent<Fighter>();
+            actionScheduler = GetComponent<ActionScheduler>();
         }
 
         void Update()
@@ -23,21 +29,21 @@ namespace RPG.Movement
             UpdateAnimator();
         }
 
-        private void MoveToCursor()
+        public void Stop()
         {
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            agent.isStopped = true;
+        }
 
-            RaycastHit hit;
-            bool hasHit = Physics.Raycast(ray, out hit);
-
-            if (hasHit)
-            {
-                MoveTo(hit.point);
-            }
+        public void StartMoveAction(Vector3 destination) 
+        {
+            fighter.Cancel();
+            actionScheduler.StartAction(this);
+            MoveTo(destination);
         }
 
         public void MoveTo(Vector3 destination)
         {
+            agent.isStopped = false;
             agent.destination = destination;
         }
 
