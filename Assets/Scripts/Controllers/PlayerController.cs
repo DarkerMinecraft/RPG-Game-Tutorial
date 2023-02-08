@@ -47,23 +47,13 @@ namespace RPG.Control
             foreach (RaycastHit hit in hits)
             {
                 CombatTarget combatTarget = hit.collider.gameObject.GetComponent<CombatTarget>();
-                if (combatTarget == null) continue;
+                if (!fighter.CanAttack(combatTarget)) continue;
 
                 interact = true;
                 if (Input.GetMouseButtonDown(0))
                     fighter.Attack(combatTarget);
             }
             return interact;
-        }
-
-        bool MoveToCursor()
-        {
-            RaycastHit hit;
-
-            bool hasHit = Physics.Raycast(GetMouseRay(), out hit);
-            if (hasHit)
-                mover.MoveTo(hit.point);
-            return hasHit;
         }
 
         private Ray GetMouseRay()

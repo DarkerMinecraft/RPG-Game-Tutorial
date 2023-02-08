@@ -5,14 +5,12 @@ using UnityEngine.AI;
 
 namespace RPG.Movement
 {
-    public class Mover : MonoBehaviour
+    public class Mover : MonoBehaviour, IAction
     {
 
         private NavMeshAgent agent;
        
         private Animator animator;
-
-        private Fighter fighter;
 
         private ActionScheduler actionScheduler;
 
@@ -20,7 +18,6 @@ namespace RPG.Movement
         {
             agent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
-            fighter = GetComponent<Fighter>();
             actionScheduler = GetComponent<ActionScheduler>();
         }
 
@@ -29,14 +26,13 @@ namespace RPG.Movement
             UpdateAnimator();
         }
 
-        public void Stop()
+        public void Cancel()
         {
             agent.isStopped = true;
         }
 
         public void StartMoveAction(Vector3 destination) 
         {
-            fighter.Cancel();
             actionScheduler.StartAction(this);
             MoveTo(destination);
         }
