@@ -12,7 +12,7 @@ namespace RPG.Combat
         private float weaponRange, weaponDamage, timeBetweenAttacks;
 
         private Health target;
-        private float timeSinceLastAttack; 
+        private float timeSinceLastAttack = Mathf.Infinity; 
 
         private Mover mover;
         private ActionScheduler actionScheduler;

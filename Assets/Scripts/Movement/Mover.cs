@@ -8,21 +8,26 @@ namespace RPG.Movement
     public class Mover : MonoBehaviour, IAction
     {
 
-        private NavMeshAgent agent;
-       
-        private Animator animator;
+        [SerializeField]
+        private float maxSpeed;
 
+        private NavMeshAgent agent;
+        private Animator animator;
         private ActionScheduler actionScheduler;
+        private Health health;
 
         void Start()
         {
             agent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
             actionScheduler = GetComponent<ActionScheduler>();
+            health = GetComponent<Health>();
         }
 
         void Update()
         {
+            agent.enabled = !health.IsDead();
+
             UpdateAnimator();
         }
 
@@ -31,15 +36,16 @@ namespace RPG.Movement
             agent.isStopped = true;
         }
 
-        public void StartMoveAction(Vector3 destination) 
+        public void StartMoveAction(Vector3 destination, float speedFraction = 1) 
         {
             actionScheduler.StartAction(this);
-            MoveTo(destination);
+            MoveTo(destination, speedFraction);
         }
 
-        public void MoveTo(Vector3 destination)
+        public void MoveTo(Vector3 destination, float speedFraction = 1)
         {
             agent.isStopped = false;
+            agent.speed = maxSpeed * Mathf.Clamp01(speedFraction);
             agent.destination = destination;
         }
 

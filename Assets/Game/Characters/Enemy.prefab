@@ -175,3 +175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaseDistance: 5
+  suspicionTime: 5
+  waypointWaitTime: 2
+  waypointTolerance: 1
+  patrolPath: {fileID: 0}
