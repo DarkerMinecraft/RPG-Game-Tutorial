@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 namespace RPG.Saving
@@ -11,48 +13,57 @@ namespace RPG.Saving
        
         public void Save(string saveFile) 
         {
-            string path = GetPathFromSaveFile(saveFile);
-            print("Saving to " + path);
-
-            using (FileStream fs = File.Open(path, FileMode.Create))
-            {
-                Transform player = GameObject.FindGameObjectWithTag("Player").transform;
-                byte[] buffer = SerizalizeVector(player.position);
-                fs.Write(buffer, 0, buffer.Length);
-            }
+            Dictionary<string, object> state = LoadFile(saveFile);
+            CaptureState(state);
+            SaveFile(saveFile, state);
         }
 
         public void Load(string saveFile)
         {
-            string path = GetPathFromSaveFile(saveFile);
-            print("Loading from " + path);
+            RestoreState(LoadFile(saveFile));
+        }
 
-            using (FileStream fs = File.Open(path, FileMode.Open))
+        private void CaptureState(Dictionary<string, object> state) 
+        {
+            foreach(SaveableEntity saveable in FindObjectsOfType<SaveableEntity>()) 
             {
-                byte[] buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, buffer.Length);
-                Vector3 position = DeserizalizeVector(buffer);
-
-                GameObject.FindGameObjectWithTag("Player").transform.position = position;
+                state[saveable.GetUniqueUdentifier()] = saveable.CaptureState();
             }
         }
 
-        private byte[] SerizalizeVector(Vector3 vector) 
+        private void RestoreState(Dictionary<string, object> stateDict) 
         {
-            byte[] vectorBytes = new byte[4 * 3];
-            BitConverter.GetBytes(vector.x).CopyTo(vectorBytes, 0);
-            BitConverter.GetBytes(vector.y).CopyTo(vectorBytes, 4);
-            BitConverter.GetBytes(vector.z).CopyTo(vectorBytes, 8);    
-            return vectorBytes;
+            foreach (SaveableEntity saveable in FindObjectsOfType<SaveableEntity>())
+            {
+                string uuid = saveable.GetUniqueUdentifier();
+                if(stateDict.ContainsKey(uuid))
+                    saveable.RestoreState(stateDict[uuid]);
+            }
         }
 
-        private Vector3 DeserizalizeVector(byte[] buffer) 
+        void SaveFile(string saveFile, object obj) 
         {
-            Vector3 vector = new Vector3();
-            vector.x = BitConverter.ToSingle(buffer, 0);
-            vector.y = BitConverter.ToSingle(buffer, 4);
-            vector.z = BitConverter.ToSingle(buffer, 8);
-            return vector;
+            string path = GetPathFromSaveFile(saveFile);
+
+            using (FileStream fs = File.Open(path, FileMode.Create))
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                binaryFormatter.Serialize(fs, obj);
+            }
+        }
+
+        Dictionary<string, object> LoadFile(string saveFile) 
+        {
+            string path = GetPathFromSaveFile(saveFile);
+
+            if (!File.Exists(path)) 
+                return new Dictionary<string, object>();
+
+            using (FileStream fs = File.Open(path, FileMode.Open)) 
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                return (Dictionary<string, object>) binaryFormatter.Deserialize(fs);
+            }
         }
 
         private string GetPathFromSaveFile(string saveFile) 

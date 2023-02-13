@@ -84,6 +84,10 @@ PrefabInstance:
       propertyPath: m_Speed
       value: 4.8
       objectReference: {fileID: 0}
+    - target: {fileID: 1202246297224839331, guid: f5b5878385e1ff941aa409b2d41bcdf6, type: 3}
+      propertyPath: uniqueIdentifier
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7398205353355979318, guid: f5b5878385e1ff941aa409b2d41bcdf6, type: 3}
       propertyPath: m_Name
       value: Enemy
@@ -184,3 +188,15 @@ MonoBehaviour:
   patrolPath: {fileID: 0}
   waypointWaitTime: 2
   waypointTolerance: 1
+--- !u!114 &-3754577725989967292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6379585752377884653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a97cdfb065b31243ab1bb38b61d23c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

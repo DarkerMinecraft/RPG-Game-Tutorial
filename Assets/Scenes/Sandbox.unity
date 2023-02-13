@@ -232,7 +232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &78308405
 Transform:
   m_ObjectHideFlags: 0
@@ -492,13 +492,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1157162471}
     m_Modifications:
+    - target: {fileID: 3354160557410276728, guid: 68238af054b1e274189530a9681c2de3, type: 3}
+      propertyPath: uniqueIdentifier
+      value: 87bdf9b6-66f3-47fa-b167-dfeb05a3d620
+      objectReference: {fileID: 0}
     - target: {fileID: 4477532279275361697, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: maxSpeed
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4724708204804847523, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4724708204804847523, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -710,13 +714,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1157162471}
     m_Modifications:
+    - target: {fileID: 3354160557410276728, guid: 68238af054b1e274189530a9681c2de3, type: 3}
+      propertyPath: uniqueIdentifier
+      value: c0846a39-5756-44eb-a49c-2c40e54bafd1
+      objectReference: {fileID: 0}
     - target: {fileID: 4477532279275361697, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: maxSpeed
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4724708204804847523, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4724708204804847523, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -921,12 +929,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1178675274}
   - {fileID: 1579825819}
   - {fileID: 471387315}
   - {fileID: 1408789117}
   - {fileID: 1176510566}
   - {fileID: 324885987}
-  - {fileID: 1178675274}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -937,13 +945,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1157162471}
     m_Modifications:
+    - target: {fileID: 3354160557410276728, guid: 68238af054b1e274189530a9681c2de3, type: 3}
+      propertyPath: uniqueIdentifier
+      value: b96f0029-2c40-4d97-be6c-cc07e5bc74ed
+      objectReference: {fileID: 0}
     - target: {fileID: 4477532279275361697, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: maxSpeed
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4724708204804847523, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4724708204804847523, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1003,6 +1015,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1157162471}
     m_Modifications:
+    - target: {fileID: 3354160557410276728, guid: 68238af054b1e274189530a9681c2de3, type: 3}
+      propertyPath: uniqueIdentifier
+      value: 9b97e48f-6d98-448f-999d-7920a547e58a
+      objectReference: {fileID: 0}
     - target: {fileID: 4221491626142516415, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1013,7 +1029,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4724708204804847523, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4724708204804847523, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_LocalScale.x
@@ -1220,7 +1236,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1282339070}
-  m_LocalRotation: {x: 0.35987404, y: -0.009328593, z: 0.0035984, w: 0.93294734}
+  m_LocalRotation: {x: 0.35987404, y: -0.009328593, z: 0.0035984004, w: 0.93294734}
   m_LocalPosition: {x: -29.064098, y: 9.81, z: 27.782042}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1294,13 +1310,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1157162471}
     m_Modifications:
+    - target: {fileID: 3354160557410276728, guid: 68238af054b1e274189530a9681c2de3, type: 3}
+      propertyPath: uniqueIdentifier
+      value: 7b66d00d-2c7f-4b83-9c4d-9b7eecb13b6a
+      objectReference: {fileID: 0}
     - target: {fileID: 4477532279275361697, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: maxSpeed
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4724708204804847523, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4724708204804847523, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1455,13 +1475,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1157162471}
     m_Modifications:
+    - target: {fileID: 3354160557410276728, guid: 68238af054b1e274189530a9681c2de3, type: 3}
+      propertyPath: uniqueIdentifier
+      value: 2dd6c235-ccb1-4572-9f4a-74374ea7dc91
+      objectReference: {fileID: 0}
     - target: {fileID: 4477532279275361697, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: maxSpeed
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4724708204804847523, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4724708204804847523, guid: 68238af054b1e274189530a9681c2de3, type: 3}
       propertyPath: m_LocalPosition.x

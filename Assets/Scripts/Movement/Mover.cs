@@ -1,11 +1,12 @@
 using RPG.Combat;
 using RPG.Core;
+using RPG.Saving;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace RPG.Movement
 {
-    public class Mover : MonoBehaviour, IAction
+    public class Mover : MonoBehaviour, IAction, ISaveable
     {
 
         [SerializeField]
@@ -56,6 +57,20 @@ namespace RPG.Movement
 
             float speed = localVelocity.z;
             animator.SetFloat("forwardSpeed", speed);
+        }
+
+        public object CaptureState()
+        {
+            return new SerializableTransform(transform);
+        }
+
+        public void RestoreState(object state)
+        {
+            SerializableTransform serializableTransform = (SerializableTransform) state;
+            agent.enabled = false;
+            serializableTransform.SetTransform(transform);
+            agent.enabled = true;
+            actionScheduler.CancelCurrentAction();
         }
     }
 

@@ -1,3 +1,4 @@
+using RPG.Saving;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,8 +35,15 @@ namespace RPG.SceneManagement
         private IEnumerator Transition() 
         {
             DontDestroyOnLoad(gameObject);
+
+            SavingWrapper savingWrapper = FindObjectOfType<SavingWrapper>();
+
+            savingWrapper.Save();
+
             AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneToLoad);
             yield return asyncOperation;
+
+            savingWrapper.Load();
 
             Portal otherPortal = GetOtherPortal();
             UpdatePlayer(otherPortal);
@@ -58,9 +66,10 @@ namespace RPG.SceneManagement
         void UpdatePlayer(Portal portal) 
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
-            player.GetComponent<NavMeshAgent>().Warp(portal.spawnPoint.position);
+            player.GetComponent<NavMeshAgent>().enabled = false;
             player.transform.position = portal.spawnPoint.position;
             player.transform.rotation = portal.spawnPoint.rotation;
+            player.GetComponent<NavMeshAgent>().enabled = true;
         }
     }
 }
