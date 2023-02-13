@@ -10,7 +10,7 @@ namespace RPG.Control
     {
 
         [SerializeField]
-        private float chaseDistance, suspicionTime, waypointWaitTime, waypointTolerance;
+        private float chaseDistance, suspicionTime;
 
         [SerializeField]
         [Range(0f, 1f)]
@@ -18,6 +18,9 @@ namespace RPG.Control
 
         [SerializeField]
         private PatrolPath patrolPath;
+
+        [SerializeField]
+        private float waypointWaitTime, waypointTolerance;
 
         private Fighter fighter;
         private Mover mover;
@@ -97,7 +100,7 @@ namespace RPG.Control
                     }
                 }
                 nextPosition = GetCurrentWaypoint();
-            }
+            } else mover.StartMoveAction(nextPosition, patrolSpeedFraction);
 
             if (timeSinceAtWaypoint > waypointWaitTime) { 
                 mover.StartMoveAction(nextPosition, patrolSpeedFraction);
