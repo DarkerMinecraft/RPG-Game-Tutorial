@@ -9,9 +9,11 @@ namespace RPG.Saving
 
         private SavingSystem savingSystem;
 
-        private void Start()
+        private IEnumerator Start()
         {
-            savingSystem = GetComponent<SavingSystem>();  
+            savingSystem = GetComponent<SavingSystem>();
+
+            yield return savingSystem.LoadLastScene(defaultSaveFile);
         }
 
         private void Update()

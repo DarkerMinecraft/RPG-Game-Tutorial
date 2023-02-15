@@ -57,6 +57,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30cf93deff988e74e88a144bd2127c18, type: 3}
+--- !u!4 &4221491626139635949 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 423694, guid: 30cf93deff988e74e88a144bd2127c18, type: 3}
+  m_PrefabInstance: {fileID: 4221491626139232227}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4477532279912879579
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -65,6 +70,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -6569691179326135775, guid: f5b5878385e1ff941aa409b2d41bcdf6, type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 9b14ec5d276d3234fa35d21b810eb32b, type: 2}
+    - target: {fileID: -6569691179326135775, guid: f5b5878385e1ff941aa409b2d41bcdf6, type: 3}
       propertyPath: weaponRange
       value: 2
       objectReference: {fileID: 0}
@@ -72,6 +81,14 @@ PrefabInstance:
       propertyPath: weaponDamage
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: -6569691179326135775, guid: f5b5878385e1ff941aa409b2d41bcdf6, type: 3}
+      propertyPath: defaultWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 9b14ec5d276d3234fa35d21b810eb32b, type: 2}
+    - target: {fileID: -6569691179326135775, guid: f5b5878385e1ff941aa409b2d41bcdf6, type: 3}
+      propertyPath: handTransform
+      value: 
+      objectReference: {fileID: 4221491626139635949}
     - target: {fileID: -6569691179326135775, guid: f5b5878385e1ff941aa409b2d41bcdf6, type: 3}
       propertyPath: timeBetweenAttacks
       value: 1.2
@@ -170,6 +187,18 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-3754577725989967292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6379585752377884653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a97cdfb065b31243ab1bb38b61d23c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8161000240448814219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,15 +217,3 @@ MonoBehaviour:
   patrolPath: {fileID: 0}
   waypointWaitTime: 2
   waypointTolerance: 1
---- !u!114 &-3754577725989967292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6379585752377884653}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a97cdfb065b31243ab1bb38b61d23c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

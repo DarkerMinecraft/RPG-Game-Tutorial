@@ -40,13 +40,14 @@ namespace RPG.SceneManagement
 
             savingWrapper.Save();
 
-            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneToLoad);
-            yield return asyncOperation;
+            yield return SceneManager.LoadSceneAsync(sceneToLoad);
 
             savingWrapper.Load();
 
             Portal otherPortal = GetOtherPortal();
             UpdatePlayer(otherPortal);
+
+            savingWrapper.Save();
 
             Destroy(gameObject);
         }
