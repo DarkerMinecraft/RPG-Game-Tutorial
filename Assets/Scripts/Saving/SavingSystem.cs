@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,15 +23,20 @@ namespace RPG.Saving
             RestoreState(LoadFile(saveFile));
         }
 
+        public void Delete(string saveFile) 
+        {
+            File.Delete(GetPathFromSaveFile(saveFile));
+        }
+
         public IEnumerator LoadLastScene(string saveFile) 
         {
             Dictionary<string, object> state = LoadFile(saveFile);
+            int buildIndex = SceneManager.GetActiveScene().buildIndex;
             if (state.ContainsKey("lastSceneBuildIndex"))
             {
-                int buildIndex = (int) state["lastSceneBuildIndex"];
-                if (buildIndex != SceneManager.GetActiveScene().buildIndex)
-                    yield return SceneManager.LoadSceneAsync(buildIndex);
+                buildIndex = (int) state["lastSceneBuildIndex"];
             }
+            yield return SceneManager.LoadSceneAsync(buildIndex);
             RestoreState(state);
         }
 

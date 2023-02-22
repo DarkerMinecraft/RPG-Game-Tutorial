@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Data;
 using UnityEngine;
 
 namespace RPG.Saving
@@ -9,7 +10,12 @@ namespace RPG.Saving
 
         private SavingSystem savingSystem;
 
-        private IEnumerator Start()
+        private void Awake()
+        {
+            StartCoroutine(LoadLastScene());
+        }
+
+        private IEnumerator LoadLastScene()
         {
             savingSystem = GetComponent<SavingSystem>();
 
@@ -22,6 +28,8 @@ namespace RPG.Saving
                 Save();
             if (Input.GetKeyDown(KeyCode.L))
                 Load();
+            if (Input.GetKeyDown(KeyCode.Delete))
+                Delete();
         }
 
         public void Save() 
@@ -33,5 +41,11 @@ namespace RPG.Saving
         {
             savingSystem.Load(defaultSaveFile);
         }
+
+        public void Delete() 
+        {
+            savingSystem.Delete(defaultSaveFile);
+        }
+
     }
 }

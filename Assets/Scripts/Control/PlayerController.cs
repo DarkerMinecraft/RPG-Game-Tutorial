@@ -1,7 +1,13 @@
+using Cinemachine;
+using RPG.Attributes;
 using RPG.Combat;
 using RPG.Core;
 using RPG.Movement;
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 namespace RPG.Control
 {
@@ -14,6 +20,21 @@ namespace RPG.Control
 
         private new Camera camera;
 
+        [System.Serializable]
+        class CursorMapping 
+        {
+            public CursorType type;
+
+            public Texture2D texture;
+            public Vector2 hotspot;
+        }
+
+        [SerializeField]
+        private float maxNavMeshProjectionDistance = 1, maxPathLength = 40;
+
+        [SerializeField]
+        private CursorMapping[] mapping;
+
         void Start()
         {
             mover = GetComponent<Mover>();
@@ -25,41 +46,131 @@ namespace RPG.Control
 
         void Update()
         {
-            if (health.IsDead()) return;
+            if (InteractWithUI()) 
+            {
+                SetCursor(CursorType.UI);
+                return;
+            }
+            if (health.IsDead())
+            {
+                SetCursor(CursorType.None);
+                return;
+            }
 
-            if (InteractWithCombat()) return;
+            if (InteractWithComponent()) return; 
             if (InteractWithMovement()) return;
+
+            SetCursor(CursorType.None);
+        }
+
+        private bool InteractWithComponent()
+        {
+            bool interact = false;
+            RaycastHit[] hits = RaycastAllSorted();
+
+            foreach (RaycastHit hit in hits)
+            {
+                IRaycastable[] raycastables = hit.transform.GetComponents<IRaycastable>();
+                foreach(IRaycastable raycastable in raycastables) 
+                {
+                    if (raycastable.HandleRaycast(this)) 
+                    {
+                        interact = true;
+                        SetCursor(raycastable.GetCursorType());
+                    }
+                }
+            }
+            return interact;
+        }
+
+        RaycastHit[] RaycastAllSorted() 
+        {
+            RaycastHit[] raycastHits = Physics.RaycastAll(GetMouseRay());
+            float[] distances = new float[raycastHits.Length];
+            for (int i = 0; i < distances.Length; i++) 
+            {
+                distances[i] = raycastHits[i].distance;
+            }
+            Array.Sort(distances, raycastHits);
+            return raycastHits;
+        }
+
+        bool InteractWithUI() 
+        {
+            return EventSystem.current.IsPointerOverGameObject();
         }
 
         bool InteractWithMovement()
         {
-            RaycastHit hit;
+            Vector3 target;
 
-            bool hasHit = Physics.Raycast(GetMouseRay(), out hit);
+            bool hasHit = RaycastNavMesh(out target); 
             if (hasHit)
             {
                 if (Input.GetMouseButton(0))
-                    mover.StartMoveAction(hit.point);
+                    mover.StartMoveAction(target);
+                SetCursor(CursorType.Movement);
             }
             return hasHit;
         }
 
-        bool InteractWithCombat()
+        private bool RaycastNavMesh(out Vector3 target)
         {
-            bool interact = false;
-            RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
+            RaycastHit hit;
+            target = new Vector3();
 
-            foreach (RaycastHit hit in hits)
+            bool hasHit = Physics.Raycast(GetMouseRay(), out hit);
+
+            if (!hasHit) return false;
+
+            NavMeshHit navMeshHit;
+            bool hasCastToNavMesh = NavMesh.SamplePosition(hit.point, out navMeshHit, 
+                maxNavMeshProjectionDistance, NavMesh.AllAreas);
+
+            if(!hasCastToNavMesh) return false;
+            target = navMeshHit.position;
+
+            NavMeshPath path = new NavMeshPath();
+            bool hasPath = NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
+            if (!hasPath || path.status != NavMeshPathStatus.PathComplete) return false;
+
+            if (GetPathLength(path) > maxPathLength) return false;
+
+            return true;
+        }
+
+        private float GetPathLength(NavMeshPath path)
+        {
+            float distance = 0;
+            if (path.corners.Length < 2) return 0;
+
+            for (int i = 0; i < path.corners.Length - 1; i++)
             {
-                CombatTarget combatTarget = hit.collider.gameObject.GetComponent<CombatTarget>();
-                if (combatTarget == null) continue;
-                if (!fighter.CanAttack(combatTarget.gameObject)) continue;
+                Vector3 firstVector = path.corners[i];
+                Vector3 secondVector = path.corners[i + 1];
 
-                interact = true;
-                if (Input.GetMouseButton(0))
-                    fighter.Attack(combatTarget.gameObject);
+                distance += Vector3.Distance(firstVector, secondVector);
             }
-            return interact;
+            return distance;
+        }
+
+        private void SetCursor(CursorType type)
+        {
+            CursorMapping mapping = GetCursorMapping(type);
+            Cursor.SetCursor(mapping.texture, mapping.hotspot, CursorMode.Auto);
+        }
+
+        private CursorMapping GetCursorMapping(CursorType type) 
+        {
+            CursorMapping cursorMap = null;
+            foreach (CursorMapping cursorMapping in mapping) 
+            {
+                if (cursorMapping.type == type) 
+                {
+                    cursorMap = cursorMapping;
+                }
+            }
+            return cursorMap;
         }
 
         private Ray GetMouseRay()

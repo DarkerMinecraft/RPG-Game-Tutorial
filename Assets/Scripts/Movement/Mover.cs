@@ -1,4 +1,4 @@
-using RPG.Combat;
+using RPG.Attributes;
 using RPG.Core;
 using RPG.Saving;
 using UnityEngine;
@@ -67,10 +67,10 @@ namespace RPG.Movement
         public void RestoreState(object state)
         {
             SerializableTransform serializableTransform = (SerializableTransform) state;
-            agent.enabled = false;
+            GetComponent<NavMeshAgent>().enabled = false;
             serializableTransform.SetTransform(transform);
-            agent.enabled = true;
-            actionScheduler.CancelCurrentAction();
+            GetComponent<NavMeshAgent>().enabled = true;
+            GetComponent<ActionScheduler>().CancelCurrentAction();
         }
     }
 

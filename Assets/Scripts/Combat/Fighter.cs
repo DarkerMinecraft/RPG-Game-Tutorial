@@ -1,21 +1,25 @@
+using RPG.Attributes;
 using RPG.Core;
 using RPG.Movement;
+using RPG.Saving;
+using RPG.Stats;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace RPG.Combat
 {
-    public class Fighter : MonoBehaviour, IAction
+    public class Fighter : MonoBehaviour, IAction, ISaveable, IModifierProvider
     {
 
         [SerializeField]
         private float timeBetweenAttacks;
 
         [SerializeField]
-        private Transform handTransform;
+        private Transform rightHandTransform, leftHandTransform;
 
         [SerializeField]
-        private Weapon defaultWeapon;
+        private string defaultWeaponName = "Unarmed";
 
         private Health target;
         private float timeSinceLastAttack = Mathf.Infinity;
@@ -25,16 +29,20 @@ namespace RPG.Combat
         private Mover mover;
         private ActionScheduler actionScheduler;
         private Animator animator;
+        private BaseStats baseStats;
 
         private void Start()
         {
             mover = GetComponent<Mover>();
             actionScheduler = GetComponent<ActionScheduler>();
             animator = GetComponent<Animator>();
+            baseStats = GetComponent<BaseStats>();
 
-            timeSinceLastAttack = 0;
-
-            EquipWeapon(defaultWeapon);
+            if (currentWeapon == null)
+            {
+                Weapon weapon = Resources.Load<Weapon>(defaultWeaponName);
+                EquipWeapon(weapon);
+            }
         }
 
         void Update()
@@ -55,9 +63,11 @@ namespace RPG.Combat
 
         public void EquipWeapon(Weapon weapon) 
         {
-            weapon.Spawn(handTransform, animator);
+            weapon.Spawn(rightHandTransform, leftHandTransform, animator);
             currentWeapon = weapon;
         }
+
+        public Health GetTarget() { return target; }
 
         private bool GetIsInRange() 
         {
@@ -107,12 +117,49 @@ namespace RPG.Combat
             animator.SetTrigger("cancelAttack");
         }
 
+        public IEnumerable<float> GetAdditiveModifers(Stat stat)
+        {
+            if (stat == Stat.Damage) 
+            {
+                yield return currentWeapon.GetDamage();
+            }
+        }
+
+        public IEnumerable<float> GetPercentageModifers(Stat stat)
+        {
+            if (stat == Stat.Damage)
+            {
+                yield return currentWeapon.GetPercentageBonus();
+            }
+        }
+
         // Animation Event
         void Hit() 
         {
             if (target == null) return;
 
-            target.TakeDamage(currentWeapon.GetDamage());
+            float damage = baseStats.GetStat(Stat.Damage);
+
+            if (currentWeapon.HasProjectile()) currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, target, damage);
+            else target.TakeDamage(damage);
         }
+
+        void Shoot() 
+        {
+            Hit();
+        }
+
+        public object CaptureState()
+        {
+            return currentWeapon.name;
+        }
+
+        public void RestoreState(object state)
+        {
+            animator = GetComponent<Animator>();
+            Weapon weapon = Resources.Load<Weapon>((string) state);
+            EquipWeapon(weapon);
+        }
+
     }
 }

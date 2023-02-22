@@ -1,20 +1,27 @@
 using UnityEngine;
 
-using RPG.Core;
+using RPG.Attributes;
+using RPG.Control;
 
 namespace RPG.Combat
 {
     [RequireComponent(typeof(Health))]
-    public class CombatTarget : MonoBehaviour
+    public class CombatTarget : MonoBehaviour, IRaycastable
     {
-        void Start()
+        public bool HandleRaycast(PlayerController playerController)
         {
+            Fighter fighter = playerController.GetComponent<Fighter>();
+            if (!fighter.CanAttack(gameObject)) return false;
 
+            
+            if (Input.GetMouseButton(0))
+                fighter.Attack(gameObject);
+            return true;
         }
 
-        void Update()
+        public CursorType GetCursorType()
         {
-
+            return CursorType.Combat;
         }
     }
 }
