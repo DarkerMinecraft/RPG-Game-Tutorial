@@ -2,6 +2,7 @@
 using RPG.Core;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace RPG.Combat
 {
@@ -21,7 +22,10 @@ namespace RPG.Combat
         private float maxLifeTime = 10, lifeAfterImpact = 2;
 
         [SerializeField]
-        private GameObject[] destroyOnHit; 
+        private GameObject[] destroyOnHit;
+
+        [SerializeField]
+        private UnityEvent onHit;
         
 
         private Health target;
@@ -64,6 +68,8 @@ namespace RPG.Combat
 
             target.TakeDamage(damage);
             speed = 0;
+
+            onHit.Invoke();
 
             if (hitEffect != null)
                 Instantiate(hitEffect, GetAimLocation(), transform.rotation);

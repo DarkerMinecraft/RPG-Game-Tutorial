@@ -23,6 +23,13 @@ namespace RPG.Control
         [SerializeField]
         private float waypointWaitTime, waypointTolerance;
 
+        [Space]
+
+        [SerializeField]
+        private bool shouldAggroOthers = false;
+        [SerializeField]
+        private float aggroRadius;
+
         private Fighter fighter;
         private Mover mover;
         private Health health;
@@ -69,6 +76,11 @@ namespace RPG.Control
             return distance < chaseDistance && fighter.CanAttack(player);
         }
 
+        public void Aggrevate() 
+        {
+            AttackBehaviour();
+        }
+
         void UpdateTimers() 
         {
             timeSinceLastSawPlayer += Time.deltaTime;
@@ -79,6 +91,21 @@ namespace RPG.Control
         {
             timeSinceLastSawPlayer = 0;
             fighter.Attack(player);
+
+            if (shouldAggroOthers)
+                AggrevateNearbyEnemies();
+        }
+
+        void AggrevateNearbyEnemies() 
+        {
+            RaycastHit[] hits = Physics.SphereCastAll(transform.position, aggroRadius, Vector3.up, 0);
+
+            foreach(RaycastHit hit in hits) 
+            {
+                AIController ai = hit.transform.GetComponent<AIController>();
+                if (ai != null)
+                    ai.Aggrevate();
+            }
         }
 
         void SuspicionBehaviour() 

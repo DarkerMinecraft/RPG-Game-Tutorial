@@ -30,7 +30,7 @@ namespace RPG.Control
         }
 
         [SerializeField]
-        private float maxNavMeshProjectionDistance = 1, maxPathLength = 40;
+        private float maxNavMeshProjectionDistance = 1;
 
         [SerializeField]
         private CursorMapping[] mapping;
@@ -73,6 +73,8 @@ namespace RPG.Control
                 IRaycastable[] raycastables = hit.transform.GetComponents<IRaycastable>();
                 foreach(IRaycastable raycastable in raycastables) 
                 {
+                    
+
                     if (raycastable.HandleRaycast(this)) 
                     {
                         interact = true;
@@ -107,6 +109,8 @@ namespace RPG.Control
             bool hasHit = RaycastNavMesh(out target); 
             if (hasHit)
             {
+                if (!mover.CanMoveTo(target)) return false;
+                
                 if (Input.GetMouseButton(0))
                     mover.StartMoveAction(target);
                 SetCursor(CursorType.Movement);
@@ -130,29 +134,10 @@ namespace RPG.Control
             if(!hasCastToNavMesh) return false;
             target = navMeshHit.position;
 
-            NavMeshPath path = new NavMeshPath();
-            bool hasPath = NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
-            if (!hasPath || path.status != NavMeshPathStatus.PathComplete) return false;
-
-            if (GetPathLength(path) > maxPathLength) return false;
-
-            return true;
+            return mover.CanMoveTo(target);
         }
 
-        private float GetPathLength(NavMeshPath path)
-        {
-            float distance = 0;
-            if (path.corners.Length < 2) return 0;
-
-            for (int i = 0; i < path.corners.Length - 1; i++)
-            {
-                Vector3 firstVector = path.corners[i];
-                Vector3 secondVector = path.corners[i + 1];
-
-                distance += Vector3.Distance(firstVector, secondVector);
-            }
-            return distance;
-        }
+        
 
         private void SetCursor(CursorType type)
         {
